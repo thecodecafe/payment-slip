@@ -8,11 +8,11 @@ import {PaymentSlips} from './screens/PaymentSlips';
 import {PaymentSlipsDetails} from './screens/PaymentSlipDetails';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
-const queryClient = new QueryClient();
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const queryClient = new QueryClient();
 
 root.render(
   <React.StrictMode>
