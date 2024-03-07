@@ -1,0 +1,9 @@
+@import '../../theme/variables.scss';
+
+.page {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+  overflow: auto !important;
+  background-color: var(--ion-color-secondary);
+}
