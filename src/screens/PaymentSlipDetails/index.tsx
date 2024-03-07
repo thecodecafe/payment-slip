@@ -16,6 +16,7 @@ import {
 } from "@ionic/react";
 import {Capacitor} from '@capacitor/core';
 import {Filesystem, Directory} from '@capacitor/filesystem';
+import {Http} from '@capacitor-community/http';
 import {chevronBack} from 'ionicons/icons';
 import {IPaymentSlipDetails} from "./interfaces";
 import './styles.scss';
@@ -209,21 +210,17 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
       if (isPending) {
         return;
       }
-      let perm = await Filesystem.checkPermissions();
-      if (perm.publicStorage !== 'granted') {
-        perm = await Filesystem.requestPermissions();
-      }
+      const perm = await Filesystem.requestPermissions();
       if (perm.publicStorage !== 'granted') {
         throw new Error('Please grant app permission to store files.');
       }
       setIsPending(true);
       const abortController = new AbortController();
       ac.current = abortController;
-      await Filesystem.downloadFile({
+      await Http.downloadFile({
         url: url,
-        path: `Downloads/${getFileNameWithExtension()}`,
-        directory: Directory.Documents,
-        recursive: true,
+        filePath: `Downloads/${getFileNameWithExtension()}`,
+        fileDirectory: Directory.Documents,
       })
       if (abortController.signal.aborted) {
         return;
