@@ -6,4 +6,5 @@
   flex: 1;
   overflow: auto !important;
   background-color: var(--ion-color-secondary);
+  padding-top: env(safe-area-inset-top);
 }
