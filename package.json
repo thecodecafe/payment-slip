@@ -34,7 +34,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "android": "cap run android",
-    "ios": "cap run ios"
+    "ios": "cap run ios",
+    "web": "react-scripts start"
   },
   "eslintConfig": {
     "extends": [
