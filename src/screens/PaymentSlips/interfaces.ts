@@ -1,0 +1,1 @@
+export type IPaymentSlips = React.FC<{}>;

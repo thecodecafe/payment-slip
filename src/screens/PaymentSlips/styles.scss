@@ -1,0 +1,41 @@
+.payment-slips-page {
+  margin: 2rem 1rem;
+  .payment-slips {
+    padding-left: 0rem;
+    .payment-slip {
+      list-style-type: none;
+      margin-bottom: 1rem;
+      .payment-slip-label {
+        display: flex;
+        padding: 0.5rem 0 0.5rem 0;
+        flex: 1;
+        font-weight: 500;
+      }
+      a.payment-slip-link {
+        text-decoration: none;
+        color: #666666;
+        &:visited {
+          color: #666666;
+        }
+        &:hover {
+          color: #222222;
+        }
+      }
+    }
+  }
+
+  .modal-view-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: aquamarine;
+  }
+}
+
+.payment-slips-page-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5rem 0rem;
+}
