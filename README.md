@@ -1,46 +1,35 @@
-# Getting Started with Create React App
+# Payment Slip App
+This is a cross-platform React app that has been integrated with Capacitor, this allows you to run the app on Android, iOS, and the Web.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Setup
+1. Clone the repository to your preferred location.
+2. From your terminal cd into the directory that contains your newly booted code.
+3. Run `npm i` or `yarn` to install dependencies.
+4. Run `npm run build` or `yarn build`
+5. Run `npx cap sync` to sync your project with the Android and iOS platforms.
 
-## Available Scripts
+## Running on iOS
+To run on iOS, ensure you have XCode installed. You may follow the guide on [this page](https://capacitorjs.com/docs/getting-started/environment-setup) to set up your machine for iOS development.
+Once you're done:
+1. Run `npm run ios` or `yarn ios` from your terminal.
+2. When you receive the prompt, select your preferred Simulator and hit enter.
+The app should build and start successfully.
 
-In the project directory, you can run:
+## Running on Android
+To run on Android, ensure your environment is set up for Android development. You may follow the guide on [this page](https://capacitorjs.com/docs/getting-started/environment-setup) to set up your machine for Android development.
+Once you're done:
+1. Run `npm run android` or `yarn android` from your terminal.
+2. When you receive the prompt, select your preferred Emulator and hit enter.
+The app should build and start successfully.
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Running on the Web
+If you successfully followed all the steps above you should have not installed it on your machine. You may follow the guide on [this section]([https://capacitorjs.com/docs/getting-started/environment-setup](https://capacitorjs.com/docs/getting-started/environment-setup#core-requirements)) of the Getting Started page for Capacitor to set up Node on your machine.
+Once you're done:
+Run `npm run web` or `yarn web` from your terminal.
+The app should build and start successfully.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Live Reload on Mobile
+Currently hot reload requires manual intervention to be set up with your workflow. To set up a hot reload simply follow [this guide](https://capacitorjs.com/docs/vscode/build-and-run#live-reload) on the Capacitor documentation.
+Once done you should no longer need to always run your android or ios scripts to see the updates made to your UI.
