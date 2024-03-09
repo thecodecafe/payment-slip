@@ -16,7 +16,6 @@ import {
 } from "@ionic/react";
 import {Capacitor} from '@capacitor/core';
 import {Filesystem, Directory} from '@capacitor/filesystem';
-import {Http} from '@capacitor-community/http';
 import {chevronBack} from 'ionicons/icons';
 import {IPaymentSlipDetails} from "./interfaces";
 import './styles.scss';
@@ -217,10 +216,10 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
       setIsPending(true);
       const abortController = new AbortController();
       ac.current = abortController;
-      await Http.downloadFile({
+      await Filesystem.downloadFile({
         url: url,
-        filePath: `Downloads/${getFileNameWithExtension()}`,
-        fileDirectory: Directory.Documents,
+        path: `Download/${getFileNameWithExtension()}`,
+        directory: Directory.ExternalStorage,
       })
       if (abortController.signal.aborted) {
         return;
@@ -296,14 +295,14 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
       </IonButton>
       <IonAlert
         ref={errorAlertRef}
-        header="Failed to Download"
-        message={error || "We were unable to download your slip. Please check your internet connection and try again."}
+        header="Download Failed"
+        message={error || ''}
         buttons={['Dismiss']}
       ></IonAlert>
       <IonAlert
         ref={successAlertRef}
         header="Success"
-        message={"Successfully downloaded the Payment Slip."}
+        message="Successfully downloaded the Payment Slip."
         buttons={['Dismiss']}
       ></IonAlert>
     </>
