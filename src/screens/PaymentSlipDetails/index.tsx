@@ -162,19 +162,20 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
   const abortController = useRef<AbortController>();
   const [error, setError] = useState<string | null>(null);
 
-  const getFileName = useCallback(() => {
+  const getCleanedFileName = useCallback(() => {
     let name = fileName;
     name = name.replace(/\\\//g, "/");
-    return name.replace(/\//g, "-")
+    name = name.replace(/\//g, "-");
+    return name
   }, [fileName]);
 
   const getFileNameWithExtension = useCallback(() => {
     const urlSegments = url.split('.');
     const ext = urlSegments[urlSegments.length - 1];
-    let name = `${getFileName()}.${ext}`;
+    let name = `${getCleanedFileName()}.${ext}`;
     name = name.replace(/\\\//g, "/");
     return name.replace(/\//g, "-")
-  }, [getFileName, url]);
+  }, [getCleanedFileName, url]);
 
   const handleWebDownload = useCallback(async () => {
     try {
@@ -197,12 +198,13 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
       linkTag.parentNode?.removeChild(linkTag);
       setIsPending(false);
     } catch (e) {
+      // stop if request was cancelled
       if (axios.isCancel(e)) {
         return;
       }
       setError((e as Error).message)
-      setIsPending(false);
       errorAlert.current?.present();
+      setIsPending(false);
     }
   }, [getFileNameWithExtension, isPending, url]);
 
@@ -211,11 +213,13 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
       if (isPending) {
         return;
       }
+      // stop if permission was not granted
       const perm = await Filesystem.requestPermissions();
       if (perm.publicStorage !== 'granted') {
         throw new Error('Please grant app permission to store files.');
       }
       setIsPending(true);
+      // download the file to the Downloads folder
       const localAbortController = new AbortController();
       abortController.current = localAbortController;
       await Filesystem.downloadFile({
@@ -223,18 +227,16 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
         path: `Download/${getFileNameWithExtension()}`,
         directory: Directory.ExternalStorage,
       })
+      // stop if action was cancelled
       if (localAbortController.signal.aborted) {
         return;
       }
-      setIsPending(false);
       successAlert.current?.present()
-    } catch (e) {
-      if (axios.isCancel(e)) {
-        return;
-      }
-      setError((e as Error).message)
       setIsPending(false);
+    } catch (e) {
+      setError((e as Error).message)
       errorAlert.current?.present();
+      setIsPending(false);
     }
   }, [getFileNameWithExtension, isPending, url]);
 
@@ -244,24 +246,23 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
         return;
       }
       setIsPending(true);
+      // download the file to Documents in File app
       const localAbortController = new AbortController();
       abortController.current = localAbortController;
       await Filesystem.downloadFile({
         url: url,
         path: getFileNameWithExtension(),
-      })
+      });
+      // stop if action as aborted
       if (localAbortController.signal.aborted) {
         return;
       }
-      setIsPending(false);
       successAlert.current?.present()
-    } catch (e) {
-      if (axios.isCancel(e)) {
-        return;
-      }
-      setError((e as Error).message)
       setIsPending(false);
+    } catch (e) {
+      setError((e as Error).message)
       errorAlert.current?.present();
+      setIsPending(false);
     }
   }, [getFileNameWithExtension, isPending, url]);
 
