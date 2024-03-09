@@ -30,12 +30,16 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-server": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "android": "cap run android",
     "ios": "cap run ios",
-    "web": "react-scripts start"
+    "web": "react-scripts start",
+    "config-ip": "node ip-script.js",
+    "preandroid": "npm run config-ip",
+    "preios": "npm run config-ip"
   },
   "eslintConfig": {
     "extends": [
