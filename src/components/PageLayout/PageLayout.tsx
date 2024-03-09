@@ -1,8 +1,8 @@
 import {Outlet} from 'react-router-dom';
 import './styles.scss';
-import {IPage} from './interfaces';
+import {IPageLayout} from './interfaces';
 
-export const Page: IPage = function Page({noHeader}) {
+export const PageLayout: IPageLayout = function PageLayout() {
   return (
     <main className="page">
       <Outlet />
