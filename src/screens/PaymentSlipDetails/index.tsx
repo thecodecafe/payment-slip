@@ -157,9 +157,9 @@ const BackButton: React.FC<{
 const DownloadButton: React.FC<{url: string; fileName: string}> = function DownloadButton({url, fileName}) {
   const [isPending, setIsPending] = useState<boolean>(false);
   const cancelHttp = useRef<Canceler | null>(null);
-  const errorAlertRef = useRef<HTMLIonAlertElement | null>(null);
-  const successAlertRef = useRef<HTMLIonAlertElement | null>(null);
-  const ac = useRef<AbortController>();
+  const errorAlert = useRef<HTMLIonAlertElement | null>(null);
+  const successAlert = useRef<HTMLIonAlertElement | null>(null);
+  const abortController = useRef<AbortController>();
   const [error, setError] = useState<string | null>(null);
 
   const getFileName = useCallback(() => {
@@ -182,17 +182,19 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
         return;
       }
       setIsPending(true);
+      // make request and download file as blob
       const cancelToken = new axios.CancelToken(c => cancelHttp.current = c);
       const response = await axios.get(url, {responseType: 'blob', cancelToken});
-
-      // Create blob link to download
-      const objUrl = window.URL.createObjectURL(response.data);
-      const link = document.createElement('a');
-      link.href = objUrl;
-      link.setAttribute('download', getFileNameWithExtension());
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode?.removeChild(link);
+      // create object url from blob for download
+      const objectUrl = window.URL.createObjectURL(response.data);
+      // create link element
+      const linkTag = document.createElement('a');
+      linkTag.href = objectUrl;
+      linkTag.setAttribute('download', getFileNameWithExtension());
+      document.body.appendChild(linkTag);
+      // download file and delete tag
+      linkTag.click();
+      linkTag.parentNode?.removeChild(linkTag);
       setIsPending(false);
     } catch (e) {
       if (axios.isCancel(e)) {
@@ -200,7 +202,7 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
       }
       setError((e as Error).message)
       setIsPending(false);
-      errorAlertRef.current?.present();
+      errorAlert.current?.present();
     }
   }, [getFileNameWithExtension, isPending, url]);
 
@@ -214,25 +216,25 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
         throw new Error('Please grant app permission to store files.');
       }
       setIsPending(true);
-      const abortController = new AbortController();
-      ac.current = abortController;
+      const localAbortController = new AbortController();
+      abortController.current = localAbortController;
       await Filesystem.downloadFile({
         url: url,
         path: `Download/${getFileNameWithExtension()}`,
         directory: Directory.ExternalStorage,
       })
-      if (abortController.signal.aborted) {
+      if (localAbortController.signal.aborted) {
         return;
       }
       setIsPending(false);
-      successAlertRef.current?.present()
+      successAlert.current?.present()
     } catch (e) {
       if (axios.isCancel(e)) {
         return;
       }
       setError((e as Error).message)
       setIsPending(false);
-      errorAlertRef.current?.present();
+      errorAlert.current?.present();
     }
   }, [getFileNameWithExtension, isPending, url]);
 
@@ -242,24 +244,24 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
         return;
       }
       setIsPending(true);
-      const abortController = new AbortController();
-      ac.current = abortController;
+      const localAbortController = new AbortController();
+      abortController.current = localAbortController;
       await Filesystem.downloadFile({
         url: url,
         path: getFileNameWithExtension(),
       })
-      if (abortController.signal.aborted) {
+      if (localAbortController.signal.aborted) {
         return;
       }
       setIsPending(false);
-      successAlertRef.current?.present()
+      successAlert.current?.present()
     } catch (e) {
       if (axios.isCancel(e)) {
         return;
       }
       setError((e as Error).message)
       setIsPending(false);
-      errorAlertRef.current?.present();
+      errorAlert.current?.present();
     }
   }, [getFileNameWithExtension, isPending, url]);
 
@@ -281,8 +283,8 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
       if (cancelHttp.current) {
         cancelHttp.current();
       }
-      if (ac.current?.signal.aborted === false) {
-        ac.current.abort();
+      if (abortController.current?.signal.aborted === false) {
+        abortController.current.abort();
       }
     }
   }, [])
@@ -294,13 +296,13 @@ const DownloadButton: React.FC<{url: string; fileName: string}> = function Downl
         {isPending ? <IonSpinner color="secondary" /> : 'Download'}
       </IonButton>
       <IonAlert
-        ref={errorAlertRef}
+        ref={errorAlert}
         header="Download Failed"
         message={error || ''}
         buttons={['Dismiss']}
       ></IonAlert>
       <IonAlert
-        ref={successAlertRef}
+        ref={successAlert}
         header="Success"
         message="Successfully downloaded the Payment Slip."
         buttons={['Dismiss']}
