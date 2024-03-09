@@ -1,7 +1,7 @@
 import {Route, Routes} from "react-router-dom";
-import {PageLayout} from "./components/PageLayout";
-import {PaymentSlipsDetails} from "./screens/PaymentSlipDetails";
-import {PaymentSlips} from "./screens/PaymentSlips";
+import {PageLayout} from "./components/PageLayout/PageLayout";
+import {PaymentSlipsDetails} from "./screens/PaymentSlipDetails/PaymentSlipsDetails";
+import {PaymentSlips} from "./screens/PaymentSlips/PaymentSlips";
 
 export function App() {
   return (
